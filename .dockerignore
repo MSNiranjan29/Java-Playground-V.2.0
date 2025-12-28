@@ -1,0 +1,6 @@
+target/
+.git/
+.mvn/
+.env/
+src/main/resources/secrets.properties
+**/*.class
