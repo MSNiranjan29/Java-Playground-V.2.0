@@ -44,3 +44,6 @@ Thumbs.db
 # Secrets
 **/secrets.properties
 .env
+# Docker
+docker-compose.override.yml
+compose.override.yml
