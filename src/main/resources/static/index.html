@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Java Playground</title>
+    <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/addon/hint/show-hint.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        fetch("/user").then(res => res.json()).then(data => {
+            if (data.loggedIn) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userProfile').style.display = 'flex';
+                document.getElementById('userName').textContent = data.name;
+                document.getElementById('userAvatar').src = data.avatar || "https://ui-avatars.com/api/?name=" + encodeURIComponent(data.name) + "&background=bd93f9&color=fff";
+            }
+        }).catch(err => console.log("Guest"));
+    </script>
+</head>
+
+<body>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div id="saveModal" class="modal" style="display: none;">
+        <div class="modal-content small-modal">
+            <h3 id="saveModalTitle">Save Program</h3>
+            <input type="text" id="fileNameInput" placeholder="Enter file name (e.g. Main.java)" class="modal-input">
+            <div class="modal-actions">
+                <button id="cancelSaveBtn" class="modal-btn cancel">Cancel</button>
+                <button id="confirmSaveBtn" class="modal-btn confirm">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="modal" style="display: none;">
+        <div class="modal-content small-modal">
+            <h3>Delete Code?</h3>
+            <p>Are you sure you want to delete this program? This cannot be undone.</p>
+            <div class="modal-actions">
+                <button id="cancelDeleteBtn" class="modal-btn cancel">Cancel</button>
+                <button id="confirmDeleteBtn" class="modal-btn delete">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h3>My Playground</h3>
+            <button id="closeSidebar" class="icon-btn">&times;</button>
+        </div>
+        <button id="newProgramBtn" class="new-chat-btn"><span>+</span> New Code</button>
+        <div class="program-list" id="programList"></div>
+    </div>
+
+    <header class="top-bar">
+        <div class="logo">
+            <button id="menuBtn" class="icon-btn" style="margin-right: 10px; font-size: 20px;">☰</button>
+            <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            <span class="app-title">Java Playground</span>
+        </div>
+
+        <div class="controls">
+            <button id="runBtn"><span class="btn-icon">▶</span> Run</button>
+            <button id="aiBtn" style="background: linear-gradient(135deg, #ff79c6, #bd93f9); color: white;"><span class="btn-icon">🧪</span> Brutal Tests</button>
+            <button id="hintBtn" style="background: linear-gradient(135deg, #f1fa8c, #f39c12); color: #282a36;"><span class="btn-icon">💡</span> Hint</button>
+            <button id="saveBtn" style="background: #282a36; border: 1px solid #6272a4; color: #f8f8f2;"><span class="btn-icon">💾</span> Save</button>
+            <button id="copyBtn"><span class="btn-icon">📋</span> Copy</button>
+
+            <select id="layoutSelect">
+                <option value="right">Output Right</option>
+                <option value="bottom">Output Bottom</option>
+            </select>
+
+            <button id="loginBtn" class="login-btn" onclick="window.location.href='/login'">Login</button>
+            <div id="userProfile" class="user-profile" style="display: none;">
+                <img id="userAvatar" class="user-avatar" src="">
+                <span id="userName" class="user-name">User</span>
+                <div class="logout-menu"><a href="/logout">Logout</a></div>
+            </div>
+        </div>
+    </header>
+
+    <div id="container" class="layout-right horizontal">
+        <div id="editor" class="pane editor-pane"></div>
+        <div id="splitter" class="splitter splitter-vertical"></div>
+        <div class="pane io-pane" id="terminalPane">
+            <div class="terminal-header">
+                <h3>Console</h3>
+                <button class="clear-terminal" onclick="clearTerminal()">Clear</button>
+            </div>
+            <div class="terminal-body" id="terminalBody">
+                <div id="terminalOutput"></div>
+                <div class="input-line">
+                    <span class="prompt">&gt;</span>
+                    <input type="text" id="terminalInput" placeholder="Type input here..." autocomplete="off">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/addon/hint/show-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/addon/hint/java-hint.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
